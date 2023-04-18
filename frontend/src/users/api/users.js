@@ -11,7 +11,11 @@ export const signUpUser = async ({ name, email, password }) => {
       password,
     }),
   });
-  return await res.json();
+  if (res.ok) {
+    return res.json();
+  } else {
+    return res.text();
+  }
 };
 
 export const loginUser = async ({ email, password }) => {

@@ -24,7 +24,7 @@ const signUpUser = async (req, res) => {
   try {
     const exist = await users.findByEmail(newUser.email);
     if (exist.length > 0) {
-      return res.status(422).send("Could create user, user exists");
+      return res.status(422).send("Could not create user, user exists");
     }
 
     const result = await users.create(newUser);
