@@ -1,5 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
+import Spinner from "react-bootstrap/Spinner";
 import CardsList from "../components/CardsList";
 
 const Cards = () => {
@@ -7,7 +8,12 @@ const Cards = () => {
     fetch("http://localhost:5000/api/cards").then((res) => res.json())
   );
 
-  if (isLoading) return "Loading...";
+  if (isLoading)
+    return (
+      <Spinner animation="border" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </Spinner>
+    );
 
   if (error) return "An error has occurred: " + error.message;
 

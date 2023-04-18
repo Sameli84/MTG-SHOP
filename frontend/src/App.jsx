@@ -5,10 +5,11 @@ import {
   Switch,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 import Cards from "./cards/pages/Cards";
 import AddCard from "./cards/pages/AddCard";
-import "./App.css";
+import Authenticate from "./users/pages/Authenticate";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route path="/cards/new" exact>
             <AddCard />
+          </Route>
+          <Route path="/auth">
+            <Authenticate />
           </Route>
           <Redirect to="/" />
         </Switch>
