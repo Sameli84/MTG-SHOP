@@ -1,11 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { useMutation } from "react-query";
+import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
-import { signUpUser, loginUser } from "../api/users";
+import { signUpUser, loginUser, otpFunction } from "../api/users";
+import { RecoveryContext } from "../../App";
 
 const Authenticate = (props) => {
+  const history = useHistory();
+
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -13,6 +17,8 @@ const Authenticate = (props) => {
   const [isLoginMode, setLoginMode] = useState(true);
   const [validated, setValidated] = useState(false);
   const [isError, setError] = useState(false);
+
+  const { setEmail, setOTP } = useContext(RecoveryContext);
 
   const switchModeHanlder = () => {
     setLoginMode((prevMode) => !prevMode);
@@ -47,6 +53,34 @@ const Authenticate = (props) => {
       console.log(error);
     },
   });
+
+  const otpMutation = useMutation({
+    mutationFn: otpFunction,
+    onSuccess: (data) => {
+      // Will execute only once, for the last mutation,
+      // regardless which mutation resolves first
+      console.log(data);
+    },
+    onError: (error) => {
+      // An error happened!
+      console.log(error);
+    },
+  });
+
+  function navigateToOtp() {
+    if (emailRef.current.value.includes("@")) {
+      const OTP = Math.floor(Math.random() * 9000 + 1000);
+      setOTP(OTP);
+      setEmail(emailRef.current.value)
+      otpMutation.mutate({
+        otp: OTP,
+        email: emailRef.current.value,
+      });
+      history.push("/otp");
+      return;
+    }
+    return alert("Please enter your email");
+  }
 
   const onSubmitHandler = (event) => {
     const form = event.currentTarget;
@@ -124,6 +158,9 @@ const Authenticate = (props) => {
           <Button variant="outline-primary" onClick={switchModeHanlder}>
             {isLoginMode ? "SignUp" : "Login"} instead?
           </Button>
+          <a href="#" onClick={() => navigateToOtp()} className="text-gray-800">
+            Forgot password?
+          </a>
         </Form>
         {isError && <div className="text-danger m-1">{isError}</div>}
       </Card>
