@@ -6,8 +6,10 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import { signUpUser, loginUser, otpFunction } from "../api/users";
 import { RecoveryContext } from "../../App";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const Authenticate = (props) => {
+  const auth = useContext(AuthContext);
   const history = useHistory();
 
   const nameRef = useRef();
@@ -35,6 +37,8 @@ const Authenticate = (props) => {
         setError(false);
       }
       console.log(data);
+      auth.login(data.id, data.token);
+      history.push("/")
     },
     onError: (error) => {
       console.log(error);
@@ -47,10 +51,12 @@ const Authenticate = (props) => {
       // Will execute only once, for the last mutation,
       // regardless which mutation resolves first
       console.log(data);
+      auth.login(data.id, data.token);
+      history.push("/")
     },
     onError: (error) => {
       // An error happened!
-      console.log(error);
+      return alert("Login failed");
     },
   });
 
