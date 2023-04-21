@@ -37,15 +37,25 @@ const createCard = async (req, res) => {
     return;
   }
 
-  const card = {
-    name: req.body.name.toLowerCase(),
-    set: req.body.set.toLowerCase(),
-    image: await fetch(`https://api.scryfall.com/cards/named?exact=${req.body.name.toLowerCase()}`)
-      .then((res) => res.json())
-      .then((data) => {
-        return data.image_uris.normal;
-      })
-  };
+  let card = {};
+  try {
+    const response = await fetch(
+      `https://api.scryfall.com/cards/named?exact=${req.body.name.toLowerCase()}&set=${req.body.set.toLowerCase()}`
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    card = {
+      name: req.body.name.toLowerCase(),
+      set: req.body.set.toLowerCase(),
+      image: data.image_uris.small,
+    };
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    res.status(500).send("Something went wrong");
+    return;
+  }
 
   try {
     const response = await cards.create(card);
