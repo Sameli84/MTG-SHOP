@@ -18,7 +18,7 @@ const Authenticate = (props) => {
   const [validated, setValidated] = useState(false);
   const [isError, setError] = useState(false);
 
-  const { setEmail, setOTP } = useContext(RecoveryContext);
+  const { setEmail } = useContext(RecoveryContext);
 
   const switchModeHanlder = () => {
     setLoginMode((prevMode) => !prevMode);
@@ -69,11 +69,8 @@ const Authenticate = (props) => {
 
   function navigateToOtp() {
     if (emailRef.current.value.includes("@")) {
-      const OTP = Math.floor(Math.random() * 9000 + 1000);
-      setOTP(OTP);
       setEmail(emailRef.current.value)
       otpMutation.mutate({
-        otp: OTP,
         email: emailRef.current.value,
       });
       history.push("/otp");

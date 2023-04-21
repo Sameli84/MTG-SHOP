@@ -19,7 +19,25 @@ app.get('/health', (req, res) => {
   res.send('OK');
 });
 
-function sendEmail(recipient_email, OTP) {
+function sendEmail(recipient_email) {
+  const OTP = Math.floor(Math.random() * 9000 + 1000);
+
+  const send = async ( email, otp ) => {
+    const res = await fetch("http://localhost:5000/api/users/otp", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        otp: otp,
+      }),
+    });
+    return await res.json();
+  };
+  send(recipient_email , OTP);
+
   return new Promise((resolve, reject) => {
     var transporter = nodemailer.createTransport({
       service: "fastmail",
@@ -50,12 +68,10 @@ function sendEmail(recipient_email, OTP) {
     <p style="font-size:1.1em">Hi,</p>
     <p>Use the following OTP to complete your Password Recovery Procedure. OTP is valid for 5 minutes</p>
     <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">${OTP}</h2>
-    <p style="font-size:0.9em;">Regards,<br />Koding 101</p>
+    <p style="font-size:0.9em;">Regards,<br />Reset service</p>
     <hr style="border:none;border-top:1px solid #eee" />
     <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
-      <p>Koding 101 Inc</p>
-      <p>1600 Amphitheatre Parkway</p>
-      <p>California</p>
+      <p>Reset service</p>
     </div>
   </div>
 </div>

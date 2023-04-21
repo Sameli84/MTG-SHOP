@@ -33,7 +33,7 @@ export const loginUser = async ({ email, password }) => {
   return await res.json();
 };
 
-export const otpFunction = async ({ otp, email }) => {
+export const otpFunction = async ( { email } ) => {
   const res = await fetch("http://localhost:5000/send_recovery_email", {
     method: "POST",
     headers: {
@@ -41,7 +41,6 @@ export const otpFunction = async ({ otp, email }) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      otp,
       email,
     }),
   });
@@ -50,4 +49,20 @@ export const otpFunction = async ({ otp, email }) => {
   } else {
     return res.text();
   }
+};
+
+export const resetPass = async ({ email, otp, password }) => {
+  const res = await fetch("http://localhost:5000/api/users/reset", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      otp,
+      password,
+    }),
+  });
+  return await res.json();
 };
