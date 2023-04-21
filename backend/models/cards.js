@@ -6,6 +6,7 @@ const cards = {
       db.getConnection((err, connection) => {
         if (err) return reject(err);
         connection.query("SELECT * FROM cards;", (err, result) => {
+          connection.release()
           if (err) {
             return reject(err);
           }
@@ -18,6 +19,7 @@ const cards = {
       db.getConnection((err, connection) => {
         if (err) return reject(err);
         connection.query("INSERT INTO cards SET ?", card, (err, result) => {
+          connection.release()
           if (err) {
             return reject(err);
           } else {
@@ -35,6 +37,7 @@ const cards = {
           "SELECT * FROM cards WHERE ID = ?",
           id,
           (err, result) => {
+            connection.release()
             if (err) {
               return reject(err);
             } else {
@@ -53,6 +56,7 @@ const cards = {
           `UPDATE cards SET name = ?, set = ? WHERE id = ?`,
           [card.name, card.set, card.id],
           (err, result) => {
+            connection.release()
             if (err) {
               return reject(err);
             } else {
@@ -71,6 +75,7 @@ const cards = {
           "DELETE FROM cards where ID = ?",
           id,
           (err, result) => {
+            connection.release()
             if (err) {
               return reject(err);
             } else {

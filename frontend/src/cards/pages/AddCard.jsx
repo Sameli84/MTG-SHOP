@@ -3,13 +3,14 @@ import Select from "react-select";
 import { useRef, useContext, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useMutation } from "react-query";
-import { createCard } from "../../users/api/cards";
+import { createCard } from "../api/cards";
 import { AuthContext } from "../../shared/context/auth-context";
-import { sets } from "./sets";
+import { sets } from "../components/sets";
+import { cards } from "../components/cards";
 
 const AddCard = () => {
-  const options = sets;
-  const nameRef = useRef();
+  const setOptions = sets;
+  const cardOptions = cards;
 
   const auth = useContext(AuthContext);
 
@@ -18,36 +19,39 @@ const AddCard = () => {
   });
 
   const cardSubmitHandler = (event) => {
-    console.log(selectedOption.value)
     event.preventDefault();
+    console.log(selectedCardOption.value);
     createCardMutation.mutate({
-      name: nameRef.current.value,
-      set: selectedOption.value,
+      name: selectedCardOption.value,
+      set: selectedSetOption.value,
       token: auth.token,
     });
   };
 
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedSetOption, setSelectedSetOption] = useState(null);
+  const [selectedCardOption, setSelectedCardOption] = useState(null);
 
   return (
     <div style={{ marginLeft: 10 }}>
       <Form onSubmit={cardSubmitHandler}>
-        <Form.Group controlId="name">
+      <Form.Group controlId="set">
           <Form.Label>Card Name</Form.Label>
-          <Form.Control
-            type="text"
-            ref={nameRef}
-            placeholder="Enter card name"
-          />
+          <Select
+            aria-label="Select card name"
+            options={cardOptions}
+            value={selectedCardOption}
+            onChange={setSelectedCardOption}
+            isSearchable={true}
+          ></Select>
         </Form.Group>
 
         <Form.Group controlId="set">
           <Form.Label>Card Set</Form.Label>
           <Select
             aria-label="Select card set"
-            options={options}
-            value={selectedOption}
-            onChange={setSelectedOption}
+            options={setOptions}
+            value={selectedSetOption}
+            onChange={setSelectedSetOption}
             isSearchable={true}
           ></Select>
         </Form.Group>

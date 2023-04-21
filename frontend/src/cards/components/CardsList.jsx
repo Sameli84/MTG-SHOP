@@ -25,6 +25,7 @@ const CardsList = (props) => {
                   name={card.name}
                   set={card.set}
                   image={card.image}
+                  id={card.id}
                 />
               </ListGroup.Item>
             </div>

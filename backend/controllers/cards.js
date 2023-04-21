@@ -40,7 +40,7 @@ const createCard = async (req, res) => {
   let card = {};
   try {
     const response = await fetch(
-      `https://api.scryfall.com/cards/named?exact=${req.body.name.toLowerCase()}&set=${req.body.set.toLowerCase()}`
+      `https://api.scryfall.com/cards/named?fuzzy=${req.body.name.toLowerCase()}&set=${req.body.set.toLowerCase()}`
     );
     if (!response.ok) {
       throw new Error("Network response was not ok");
