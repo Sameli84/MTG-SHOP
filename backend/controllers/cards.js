@@ -39,16 +39,19 @@ const createCard = async (req, res) => {
 
   let card = {};
   try {
-    const response = await fetch(
-      `https://api.scryfall.com/cards/named?fuzzy=${req.body.name.toLowerCase()}&set=${req.body.set.toLowerCase()}`
+    let set = req.body.set.toLowerCase()
+    let response = await fetch(
+      `https://api.scryfall.com/cards/named?fuzzy=${req.body.name.toLowerCase()}&set=${set}`
     );
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      response = await fetch(
+        `https://api.scryfall.com/cards/named?fuzzy=${req.body.name.toLowerCase()}`
+      );
     }
     const data = await response.json();
     card = {
       name: req.body.name.toLowerCase(),
-      set: req.body.set.toLowerCase(),
+      set: data.set_name,
       image: data.image_uris.small,
     };
   } catch (error) {

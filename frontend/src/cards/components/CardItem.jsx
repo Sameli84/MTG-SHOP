@@ -3,30 +3,38 @@ import { AuthContext } from "../../shared/context/auth-context";
 import { useMutation } from "react-query";
 import { Button, Modal } from "react-bootstrap";
 import { deleteCard } from "../api/cards";
+
 const CardItem = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const showModal = () => setShow(true);
+  const [deleted, setDeleted] = useState(false); // add state for deleted card
 
   const deleteCardMutation = useMutation({
-    mutationFn: deleteCard, 
+    mutationFn: deleteCard,
     onSuccess: (data) => {
       console.log(data);
+      setDeleted(true); // set state to indicate that card has been deleted
     },
     onError: (error) => {
-      console.log(error)
-    }
-  })
+      console.log(error);
+    },
+  });
 
   const handleDelete = () => {
     deleteCardMutation.mutate({
       id: props.id,
-      token: auth.token
-    })
+      token: auth.token,
+    });
     setShow(false);
-  }
+  };
 
   const auth = useContext(AuthContext);
+
+  if (deleted) { // render nothing if card has been deleted
+    return null;
+  }
+
   return (
     <>
       <div>
@@ -58,7 +66,9 @@ const CardItem = (props) => {
         <Modal.Header closeButton>
           <Modal.Title>You're about to delete {props.name}</Modal.Title>
         </Modal.Header>
-        <Modal.Body><img src={props.image} alt={props.name}/></Modal.Body>
+        <Modal.Body>
+          <img src={props.image} alt={props.name} />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-dark" onClick={handleClose}>
             Cancel
@@ -71,4 +81,5 @@ const CardItem = (props) => {
     </>
   );
 };
+
 export default CardItem;

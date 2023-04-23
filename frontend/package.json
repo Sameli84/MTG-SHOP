@@ -15,7 +15,11 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "5.3.4",
-    "react-select": "^5.7.2"
+    "react-select": "^5.7.2",
+    "react-virtualized": "^9.22.5",
+    "react-virtualized-auto-sizer": "^1.0.15",
+    "react-window": "^1.8.9",
+    "react-windowed-select": "^5.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

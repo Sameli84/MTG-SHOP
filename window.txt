@@ -1,0 +1,65 @@
+import React, { useState } from "react";
+import Select from "react-select";
+import { FixedSizeList } from "react-window";
+import { options } from "./options";
+
+const SelectVirtualized = ({ options, value, onChange }) => {
+  const ITEM_HEIGHT = 35;
+  const VISIBLE_ITEMS = 10;
+  const [inputValue, setInputValue] = useState("");
+
+  const filteredOptions = options.filter((option) =>
+    option.label.toLowerCase().includes(inputValue.toLowerCase())
+  );
+
+  const handleChange = (selectedOption) => {
+    onChange(selectedOption);
+  };
+
+  const handleInputChange = (inputValue) => {
+    setInputValue(inputValue);
+  };
+
+  const Row = ({ index, style }) => {
+    const option = filteredOptions[index];
+    return (
+      <div
+        style={style}
+        onClick={() => handleChange(option)}
+      >
+        {option.label}
+      </div>
+    );
+  };
+
+  return (
+    <Select
+      value={value}
+      options={[]}
+      inputValue={inputValue}
+      onInputChange={handleInputChange}
+      components={{
+        MenuList: (props) => {
+          const { options, children, maxHeight } = props;
+          const itemCount = Math.min(options.length, VISIBLE_ITEMS);
+          const height = itemCount * ITEM_HEIGHT;
+          return (
+            <FixedSizeList height={height} itemCount={itemCount} itemSize={ITEM_HEIGHT}>
+              {Row}
+            </FixedSizeList>
+          );
+        }
+      }}
+    />
+  );
+};
+
+export default function App() {
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  return (
+    <div className="App">
+      <SelectVirtualized options={options} value={selectedOption} onChange={setSelectedOption} />
+    </div>
+  );
+}
