@@ -1,7 +1,7 @@
 import React from "react";
 import WindowedSelect from "react-windowed-select";
 import { createFilter } from "react-windowed-select";
-import { useRef, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useMutation } from "react-query";
 import { createCard } from "../api/cards";
@@ -12,6 +12,13 @@ import { cards } from "../components/cards";
 const AddCard = () => {
   const setOptions = sets;
   const cardOptions = cards;
+  const conditionOptions = [
+    { value: "NM", label: "NM" },
+    { value: "LP", label: "LP" },
+    { value: "MP", label: "MP" },
+    { value: "HP", label: "HP" },
+    { value: "D", label: "D" },
+  ];
 
   const auth = useContext(AuthContext);
 
@@ -32,14 +39,28 @@ const AddCard = () => {
     event.preventDefault();
     console.log(selectedCardOption.value);
     createCardMutation.mutate({
-      name: selectedCardOption.value,
+      name: selectedCardOption.label,
       set: selectedSetOption.value,
+      condition: cardCondition.value,
+      price: cardPrice,
+      owner: auth.userId,
       token: auth.token,
     });
   };
 
   const [selectedSetOption, setSelectedSetOption] = useState(setOptions[0]);
   const [selectedCardOption, setSelectedCardOption] = useState(null);
+  const [cardCondition, setCardCondition] = useState(conditionOptions[0]);
+
+  const [cardPrice, setCardPrice] = useState("0");
+
+  const handlePriceChange = (event) => {
+    let value = event.target.value.replace(/[^\d.]|\.(?=.*\.)/g, ""); // remove non-digit characters
+    if (value.length > 6) {
+      value = value.substr(0, 6);
+    }
+    setCardPrice(value);
+  };
 
   const styles = {
     control: (provided, state) => ({
@@ -67,7 +88,9 @@ const AddCard = () => {
   return (
     <div style={{ marginLeft: 10 }}>
       <h2>Choose a card to add!</h2>
-      <h6>If set is not selected, or the card doesn't appear in the chosen set,</h6>
+      <h6>
+        If set is not selected, or the card doesn't appear in the chosen set,
+      </h6>
       <h6>the most recent set for the card will be chosen.</h6>
       <Form onSubmit={cardSubmitHandler}>
         <Form.Group controlId="card">
@@ -96,6 +119,29 @@ const AddCard = () => {
             styles={styles}
             filterOption={createFilter({ ignoreAccents: false })}
           ></WindowedSelect>
+        </Form.Group>
+
+        <Form.Group controlId="condition">
+          <Form.Label>Card Condition</Form.Label>
+          <WindowedSelect
+            aria-label="Select card condition"
+            options={conditionOptions}
+            value={cardCondition}
+            onChange={setCardCondition}
+            styles={styles}
+            placeholder="Near Mint"
+          ></WindowedSelect>
+        </Form.Group>
+
+        <Form.Group controlId="price">
+          <Form.Label>Price</Form.Label>
+          <Form.Control
+            type="text"
+            value={cardPrice}
+            onChange={handlePriceChange}
+            placeholder="Enter card price in euros"
+            style={{ width: 400 }}
+          />
         </Form.Group>
 
         <Button variant="primary" type="submit" disabled={!selectedCardOption}>

@@ -50,11 +50,12 @@ const cards = {
 
   updateById: (card) =>
     new Promise((resolve, reject) => {
+      console.log(card.id)
       db.getConnection((err, connection) => {
         if (err) return reject(err);
         connection.query(
-          `UPDATE cards SET name = ?, set = ? WHERE id = ?`,
-          [card.name, card.set, card.id],
+          "UPDATE cards SET `condition` = ?, price = ? WHERE id = ?",
+          [card.condition, card.price, card.id],
           (err, result) => {
             connection.release()
             if (err) {

@@ -1,15 +1,14 @@
 
-import React from "react";
+import React, {useState} from "react";
 import { ListGroup, Row, Col } from "react-bootstrap";
 
 import CardItem from './CardItem';
 
 const CardsList = (props) => {
-  const items = props.items;
 
-  const chunkSize = Math.ceil(items.length / 3); // divide the items into 3 equal parts
+  const chunkSize = Math.ceil(props.items.length / 3); // divide the items into 3 equal parts
   const chunks = Array.from({ length: 3 }, (_, i) =>
-    items.slice(i * chunkSize, (i + 1) * chunkSize)
+    props.items.slice(i * chunkSize, (i + 1) * chunkSize)
   ); // create 3 chunks of items
 
   return (
@@ -24,6 +23,9 @@ const CardsList = (props) => {
                   key={card.id}
                   name={card.name}
                   set={card.set}
+                  condition={card.condition}
+                  price={card.price}
+                  owner={card.owner}
                   image={card.image}
                   id={card.id}
                 />

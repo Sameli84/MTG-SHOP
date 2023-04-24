@@ -25,6 +25,11 @@ const NavLinks = (props) => {
             ALL CARDS
           </Nav.Link>
           {auth.isLoggedIn && (
+            <Nav.Link as={NavLink} to="/mycards">
+              MY CARDS
+            </Nav.Link>
+          )}
+          {auth.isLoggedIn && (
             <Nav.Link as={NavLink} to="/cards/new">
               ADD CARD
             </Nav.Link>

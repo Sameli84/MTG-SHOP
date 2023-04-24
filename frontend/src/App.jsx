@@ -99,6 +99,9 @@ function App() {
               <Route path="/" exact>
                 <Cards />
               </Route>
+              <Route path="/mycards" exact>
+                <Cards user="user"/>
+              </Route>
               <Route path="/cards/new" exact>
                 <AddCard />
               </Route>

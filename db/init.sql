@@ -19,7 +19,10 @@ CREATE TABLE IF NOT EXISTS `cards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   `set` varchar(60),
+  `condition` varchar(60),
+  `price` varchar(60),
   `image` varchar(500),
+  `owner` varchar(50) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
