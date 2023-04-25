@@ -88,40 +88,42 @@ const CardItem = (props) => {
 
   return (
     <Card style={cardStyle}>
-        <Card.Img variant="top" src={props.image} alt={props.name} />
-        <Card.Body>
-          <Card.Title>{props.name}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">{props.set}</Card.Subtitle>
-          <Card.Text>
-            {cardCondition} - {cardPrice} €
-          </Card.Text>
-          <Card.Footer>
-            {auth.isLoggedIn && auth.userId === props.owner ? (
-              <div className="d-flex justify-content-start">
-                <Button variant="outline-dark" onClick={showUpdateModal}>
-                  Edit
-                </Button>
-                <Button
-                  onClick={showModal}
-                  style={{ marginLeft: 8 }}
-                  variant="outline-danger"
-                >
-                  Delete
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <Button variant="outline-success">Contact Seller</Button>
-              </div>
-            )}
-          </Card.Footer>
-        </Card.Body>
+      <Card.Img variant="top" src={props.image} alt={props.name} />
+      <Card.Body>
+        <Card.Title>{props.name}</Card.Title>
+        <Card.Subtitle className="mb-2 text-muted">{props.set}</Card.Subtitle>
+        <Card.Text>
+          {cardCondition} - {cardPrice} €
+        </Card.Text>
+        <Card.Footer>
+          {auth.isLoggedIn && auth.userId === props.owner ? (
+            <div className="d-flex justify-content-start">
+              <Button variant="outline-dark" onClick={showUpdateModal}>
+                Edit
+              </Button>
+              <Button
+                onClick={showModal}
+                style={{ marginLeft: 8 }}
+                variant="outline-danger"
+              >
+                Delete
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <Button variant="outline-success">Contact Seller</Button>
+            </div>
+          )}
+        </Card.Footer>
+      </Card.Body>
       <Modal show={showUpdate} onHide={handleCloseUpdate}>
         <Modal.Header closeButton>
           <Modal.Title>Update {props.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img src={props.image} alt={props.name} />
+          <Card style={cardStyle}>
+            <Card.Img variant="top" src={props.image} alt={props.name} />
+          </Card>
           <Form.Group controlId="condition">
             <Form.Label>Card Condition</Form.Label>
             <WindowedSelect
@@ -159,7 +161,9 @@ const CardItem = (props) => {
           <Modal.Title>You're about to delete {props.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <img src={props.image} alt={props.name} />
+          <Card style={cardStyle}>
+            <Card.Img variant="top" src={props.image} alt={props.name} />
+          </Card>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-dark" onClick={handleClose}>
@@ -177,6 +181,9 @@ const CardItem = (props) => {
 const cardStyle = {
   backgroundColor: "#fff",
   borderRadius: "10px",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 3)"
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 3)",
+  minWidth: "300px",
+  maxWidth: "365px",
+  margin: "10px",
 };
 export default CardItem;

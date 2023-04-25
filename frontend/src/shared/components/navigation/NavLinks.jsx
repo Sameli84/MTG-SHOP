@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -7,14 +7,16 @@ import { AuthContext } from "../../context/auth-context";
 
 const NavLinks = (props) => {
   const auth = useContext(AuthContext);
+  const history = useHistory();
 
   const logoutUser = () => {
     // Remove token from local storage
     auth.logout();
+    history.push("/")
   };
 
   return (
-    <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
+    <Navbar fixed="top" bg="dark" variant="dark" expand="md">
       <Navbar.Brand style={{ marginLeft: 10 }} as={NavLink} to="/">
         Mtg cards for sale
       </Navbar.Brand>

@@ -1,16 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import WindowedSelect from "react-windowed-select";
 
 import CardItem from "./CardItem";
 
 const CardsList = (props) => {
-
   const [cards, setCards] = useState(props.items);
-  const chunkSize = Math.ceil(cards.length / 3); // divide the items into 3 equal parts
-  const chunks = Array.from({ length: 3 }, (_, i) =>
-    cards.slice(i * chunkSize, (i + 1) * chunkSize)
-  ); // create 3 chunks of items
 
   const conditions = [
     { value: "Any Condition", label: "Any Condition" },
@@ -70,7 +65,13 @@ const CardsList = (props) => {
     <div>
       <Row
         className="justify-content-between"
-        style={{ position: "fixed", top: 60, zIndex: 1, width: "100%" }}
+        style={{
+          position: "fixed",
+          top: 60,
+          zIndex: 1,
+          width: "100%",
+          maxWidth: "1200px",
+        }}
       >
         <Col>
           <Form.Group controlId="search" className="mx-3">
@@ -95,35 +96,38 @@ const CardsList = (props) => {
           </Form.Group>
         </Col>
       </Row>
-      <Row
+      <div
         style={{
-          position: "fixed",
-          top: 100,
+          marginTop: "30px",
           width: "100%",
-          maxHeight: "calc(100vh - 120px)",
           overflowY: "auto",
           display: "flex",
+          flexWrap: "wrap",
+          gap: "1rem",
+          justifyContent: "space-between",
+          maxWidth: "1220px",
         }}
       >
-        {chunks.map((chunk, i) => (
-            <Col key={i} className="m-3">
-              {chunk.map((card) => (
-                <div key={card.id}>
-                  <CardItem
-                    key={card.id}
-                    name={card.name}
-                    set={card.set}
-                    condition={card.condition}
-                    price={card.price}
-                    owner={card.owner}
-                    image={card.image}
-                    id={card.id}
-                  />
-                </div>
-              ))}
-            </Col>
+        {cards.map((card) => (
+          <div
+            key={card.id}
+            style={{
+              paddingTop: "8px",
+            }}
+          >
+            <CardItem
+              key={card.id}
+              name={card.name}
+              set={card.set}
+              condition={card.condition}
+              price={card.price}
+              owner={card.owner}
+              image={card.image}
+              id={card.id}
+            />
+          </div>
         ))}
-      </Row>
+      </div>
     </div>
   );
 };

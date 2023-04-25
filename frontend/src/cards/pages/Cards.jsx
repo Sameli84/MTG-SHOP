@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import Spinner from "react-bootstrap/Spinner";
 import CardsList from "../components/CardsList";
 
-const Cards = (props) => {
+const Cards = () => {
   const { isLoading, error, data } = useQuery("cardsData", () =>
     fetch("http://localhost:5000/api/cards").then((res) => res.json())
   );
