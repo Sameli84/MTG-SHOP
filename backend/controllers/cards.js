@@ -60,12 +60,17 @@ const createCard = async (req, res) => {
       price = price.replace(/^0+/, "");
     }
     price = price.replace(/(\.\d{0,2})\d*/, "$1");
+    let image = "blank.jpeg";
+    if (data.image_uris) {
+      image = data.image_uris.normal;
+    }
+
     card = {
       name: req.body.name,
       set: data.set_name,
       condition: req.body.condition,
       price: price,
-      image: data.image_uris.small,
+      image: image,
       owner: req.body.owner,
     };
   } catch (error) {
@@ -88,7 +93,7 @@ const createCard = async (req, res) => {
 };
 
 const updateCard = async (req, res) => {
-  console.log(req.body.id)
+  console.log(req.body.id);
   const schema = Joi.object({
     condition: Joi.string().min(1),
     price: Joi.string().min(1).max(6),

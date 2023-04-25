@@ -14,11 +14,7 @@ export const createCard = async ({ name, set, condition, price, owner, token }) 
       owner
     }),
   });
-  if (res.ok) {
-    return res.json();
-  } else {
-    return res.text();
-  }
+  return await res.json();
 };
 
 export const updateCard = async ({ condition, price, id, token }) => {

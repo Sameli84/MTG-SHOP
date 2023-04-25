@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import WindowedSelect from "react-windowed-select";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useMutation } from "react-query";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Card } from "react-bootstrap";
 import { deleteCard, updateCard } from "../api/cards";
 
 const CardItem = (props) => {
@@ -19,7 +19,7 @@ const CardItem = (props) => {
     mutationFn: deleteCard,
     onSuccess: (data) => {
       console.log(data);
-      setDeleted(true)
+      setDeleted(true);
     },
     onError: (error) => {
       console.log(error);
@@ -83,44 +83,39 @@ const CardItem = (props) => {
     setCardPrice(value);
   };
   if (deleted) {
-    return null
+    return null;
   }
 
   return (
-    <>
-      <div>
-        <div>
-          <img src={props.image} alt={props.name} />
-        </div>
-        <div>
-          <h5>{props.name}</h5>
-          <h5>{props.set}</h5>
-          <h5>
+    <Card style={cardStyle}>
+        <Card.Img variant="top" src={props.image} alt={props.name} />
+        <Card.Body>
+          <Card.Title>{props.name}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">{props.set}</Card.Subtitle>
+          <Card.Text>
             {cardCondition} - {cardPrice} €
-          </h5>
-        </div>
-        <div>
-          {auth.isLoggedIn && auth.userId === props.owner ? (
-            <div>
-              <Button variant="outline-dark" onClick={showUpdateModal}>
-                Edit
-              </Button>
-              <Button
-                onClick={showModal}
-                style={{ marginLeft: 8 }}
-                variant="outline-danger"
-              >
-                Delete
-              </Button>
-            </div>
-          ) : (
-            <div>
-              <Button variant="outline-success">Contact Seller</Button>
-            </div>
-          )}
-        </div>
-      </div>
-
+          </Card.Text>
+          <Card.Footer>
+            {auth.isLoggedIn && auth.userId === props.owner ? (
+              <div className="d-flex justify-content-start">
+                <Button variant="outline-dark" onClick={showUpdateModal}>
+                  Edit
+                </Button>
+                <Button
+                  onClick={showModal}
+                  style={{ marginLeft: 8 }}
+                  variant="outline-danger"
+                >
+                  Delete
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <Button variant="outline-success">Contact Seller</Button>
+              </div>
+            )}
+          </Card.Footer>
+        </Card.Body>
       <Modal show={showUpdate} onHide={handleCloseUpdate}>
         <Modal.Header closeButton>
           <Modal.Title>Update {props.name}</Modal.Title>
@@ -134,7 +129,6 @@ const CardItem = (props) => {
               options={conditionOptions}
               value={cardCondition}
               onChange={handleConditionChange}
-              styles={styles}
               placeholder={cardCondition}
             ></WindowedSelect>
           </Form.Group>
@@ -146,7 +140,7 @@ const CardItem = (props) => {
               value={cardPrice}
               onChange={handlePriceChange}
               placeholder="Enter card price in euros"
-              style={{ width: 400 }}
+              style={{ width: 465 }}
             />
           </Form.Group>
         </Modal.Body>
@@ -176,18 +170,13 @@ const CardItem = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </Card>
   );
 };
-const styles = {
-  control: (provided, state) => ({
-    ...provided,
-    width: 400, // set the width of the select
-    backgroundColor: state.isSelected ? "#007bff" : "transparent",
-    color: state.isSelected ? "white" : "black",
-    ":hover": {
-      backgroundColor: "unset !important", // remove the hover color
-    },
-  }),
+
+const cardStyle = {
+  backgroundColor: "#fff",
+  borderRadius: "10px",
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 3)"
 };
 export default CardItem;

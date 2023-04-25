@@ -1,41 +1,130 @@
+import React, { useState, useContext } from "react";
+import { Row, Col, Form } from "react-bootstrap";
+import WindowedSelect from "react-windowed-select";
 
-import React, {useState} from "react";
-import { ListGroup, Row, Col } from "react-bootstrap";
-
-import CardItem from './CardItem';
+import CardItem from "./CardItem";
 
 const CardsList = (props) => {
 
-  const chunkSize = Math.ceil(props.items.length / 3); // divide the items into 3 equal parts
+  const [cards, setCards] = useState(props.items);
+  const chunkSize = Math.ceil(cards.length / 3); // divide the items into 3 equal parts
   const chunks = Array.from({ length: 3 }, (_, i) =>
-    props.items.slice(i * chunkSize, (i + 1) * chunkSize)
+    cards.slice(i * chunkSize, (i + 1) * chunkSize)
   ); // create 3 chunks of items
 
+  const conditions = [
+    { value: "Any Condition", label: "Any Condition" },
+    { value: "NM", label: "NM" },
+    { value: "LP", label: "LP" },
+    { value: "MP", label: "MP" },
+    { value: "HP", label: "HP" },
+    { value: "D", label: "D" },
+  ];
+
+  const [searchString, setSearchString] = useState("");
+  const [cardCondition, setCardCondition] = useState(conditions[0]);
+
+  const handleSearchChange = (event) => {
+    const newSearchString = event.target.value;
+    setSearchString(newSearchString);
+    const filteredCards = filterCards(
+      props.items,
+      newSearchString,
+      cardCondition.value
+    );
+    setCards(filteredCards);
+  };
+
+  const handleConditionChange = (selectedOption) => {
+    if (selectedOption.value === "Any Condition") {
+      setCardCondition(selectedOption);
+      setCards(props.items);
+      const filteredCards = filterCards(
+        props.items,
+        searchString,
+        selectedOption.value
+      );
+      setCards(filteredCards);
+      return;
+    } else {
+      setCardCondition(selectedOption);
+      const filteredCards = filterCards(
+        props.items,
+        searchString,
+        selectedOption.value
+      );
+      setCards(filteredCards);
+    }
+  };
+
+  const filterCards = (cards, searchString, searchCondition) => {
+    return cards.filter(
+      (card) =>
+        card.name.toLowerCase().includes(searchString.toLowerCase()) &&
+        (searchCondition === "Any Condition" ||
+          card.condition.toLowerCase().includes(searchCondition.toLowerCase()))
+    );
+  };
+
   return (
-    <ListGroup>
-      <Row>
-      {chunks.map((chunk, i) => (
-        <Col key={i}>
-          {chunk.map((card) => (
-            <div key={card.id}>
-              <ListGroup.Item >
-                <CardItem
-                  key={card.id}
-                  name={card.name}
-                  set={card.set}
-                  condition={card.condition}
-                  price={card.price}
-                  owner={card.owner}
-                  image={card.image}
-                  id={card.id}
-                />
-              </ListGroup.Item>
-            </div>
-          ))}
+    <div>
+      <Row
+        className="justify-content-between"
+        style={{ position: "fixed", top: 60, zIndex: 1, width: "100%" }}
+      >
+        <Col>
+          <Form.Group controlId="search" className="mx-3">
+            <Form.Control
+              type="text"
+              value={searchString}
+              onChange={handleSearchChange}
+              placeholder="Filter listings by name"
+            />
+          </Form.Group>
         </Col>
-      ))}
+        <Col>
+          <Form.Group controlId="searchCondition">
+            <WindowedSelect
+              aria-label="Select card condition"
+              options={conditions}
+              value={cardCondition}
+              onChange={handleConditionChange}
+              placeholder="Filter listings by condition"
+              isSearchable={false}
+            ></WindowedSelect>
+          </Form.Group>
+        </Col>
       </Row>
-    </ListGroup>
+      <Row
+        style={{
+          position: "fixed",
+          top: 100,
+          width: "100%",
+          maxHeight: "calc(100vh - 120px)",
+          overflowY: "auto",
+          display: "flex",
+        }}
+      >
+        {chunks.map((chunk, i) => (
+            <Col key={i} className="m-3">
+              {chunk.map((card) => (
+                <div key={card.id}>
+                  <CardItem
+                    key={card.id}
+                    name={card.name}
+                    set={card.set}
+                    condition={card.condition}
+                    price={card.price}
+                    owner={card.owner}
+                    image={card.image}
+                    id={card.id}
+                  />
+                </div>
+              ))}
+            </Col>
+        ))}
+      </Row>
+    </div>
   );
 };
 

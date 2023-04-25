@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import Spinner from "react-bootstrap/Spinner";
 import CardsList from "../components/CardsList";
+import { AuthContext } from "../../shared/context/auth-context";
 
-const Cards = (props) => {
+const MyCards = (props) => {
   const { isLoading, error, data } = useQuery("cardsData", () =>
     fetch("http://localhost:5000/api/cards").then((res) => res.json())
   );
@@ -16,6 +17,15 @@ const Cards = (props) => {
 
   if (error) return "An error has occurred: " + error.message;
   
-  return <CardsList items={data}/>;
+  if (props.user === "user") {
+    const auth = useContext(AuthContext);
+    const filterByOwner = (items, ownerValue) => {
+      return items.filter((item) => item.owner === ownerValue);
+    };
+    const filteredItems = filterByOwner(data, auth.userId);
+    return <CardsList items={filteredItems} />;
+  }
+
+  return <></>;
 };
-export default Cards;
+export default MyCards;

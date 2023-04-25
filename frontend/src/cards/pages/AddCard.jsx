@@ -8,17 +8,12 @@ import { createCard } from "../api/cards";
 import { AuthContext } from "../../shared/context/auth-context";
 import { sets } from "../components/sets";
 import { cards } from "../components/cards";
+import { conditions } from "../components/conditions";
 
 const AddCard = () => {
   const setOptions = sets;
   const cardOptions = cards;
-  const conditionOptions = [
-    { value: "NM", label: "NM" },
-    { value: "LP", label: "LP" },
-    { value: "MP", label: "MP" },
-    { value: "HP", label: "HP" },
-    { value: "D", label: "D" },
-  ];
+  const conditionOptions = conditions;
 
   const auth = useContext(AuthContext);
 
@@ -31,7 +26,7 @@ const AddCard = () => {
     },
     onError: (error) => {
       // An error happened!
-      return alert("Something went wrong!");
+      console.log(error);
     },
   });
 
@@ -62,18 +57,6 @@ const AddCard = () => {
     setCardPrice(value);
   };
 
-  const styles = {
-    control: (provided, state) => ({
-      ...provided,
-      width: 400, // set the width of the select
-      backgroundColor: state.isSelected ? "#007bff" : "transparent",
-      color: state.isSelected ? "white" : "black",
-      ":hover": {
-        backgroundColor: "unset !important", // remove the hover color
-      },
-    }),
-  };
-
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
@@ -101,7 +84,6 @@ const AddCard = () => {
             value={selectedCardOption}
             onChange={setSelectedCardOption}
             isSearchable={true}
-            styles={styles}
             itemSize={30}
             filterOption={labelFilter}
             placeholder="Type three letters to show cards!"
@@ -116,7 +98,6 @@ const AddCard = () => {
             value={selectedSetOption}
             onChange={setSelectedSetOption}
             isSearchable={true}
-            styles={styles}
             filterOption={createFilter({ ignoreAccents: false })}
           ></WindowedSelect>
         </Form.Group>
@@ -128,8 +109,8 @@ const AddCard = () => {
             options={conditionOptions}
             value={cardCondition}
             onChange={setCardCondition}
-            styles={styles}
             placeholder="Near Mint"
+            isSearchable={false}
           ></WindowedSelect>
         </Form.Group>
 
@@ -140,7 +121,7 @@ const AddCard = () => {
             value={cardPrice}
             onChange={handlePriceChange}
             placeholder="Enter card price in euros"
-            style={{ width: 400 }}
+            style={{ width: 462 }}
           />
         </Form.Group>
 

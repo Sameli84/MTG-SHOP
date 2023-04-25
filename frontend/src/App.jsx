@@ -9,6 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect, createContext, useCallback } from "react";
 
 import Cards from "./cards/pages/Cards";
+import MyCards from "./cards/pages/MyCards";
 import AddCard from "./cards/pages/AddCard";
 import Authenticate from "./users/pages/Authenticate";
 import Otp from "./users/pages/Otp";
@@ -100,7 +101,7 @@ function App() {
                 <Cards />
               </Route>
               <Route path="/mycards" exact>
-                <Cards user="user"/>
+                <MyCards user="user"/>
               </Route>
               <Route path="/cards/new" exact>
                 <AddCard />
