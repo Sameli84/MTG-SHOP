@@ -43,7 +43,7 @@ const NavLinks = (props) => {
               </NavDropdown.Item>
             )}
             {auth.isLoggedIn && (
-              <NavDropdown.Item onClick={logoutUser}>LOGOUT</NavDropdown.Item>
+              <NavDropdown.Item onClick={logoutUser} data-testid="logout">LOGOUT</NavDropdown.Item>
             )}
           </NavDropdown>
         </Nav>

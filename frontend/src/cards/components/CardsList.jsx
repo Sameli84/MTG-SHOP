@@ -61,6 +61,10 @@ const CardsList = (props) => {
     );
   };
 
+  if (cards === undefined || cards.length == 0) {
+    return (<h3>No cards to show.</h3>)
+  }
+
   return (
     <div>
       <Row
