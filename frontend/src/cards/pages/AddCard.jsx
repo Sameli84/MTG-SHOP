@@ -76,7 +76,7 @@ const AddCard = () => {
       </h6>
       <h6>the most recent set for the card will be chosen.</h6>
       <Form onSubmit={cardSubmitHandler}>
-        <Form.Group controlId="card">
+        <Form.Group controlId="card" data-cy="cardNameInput">
           <Form.Label>Card Name</Form.Label>
           <WindowedSelect
             aria-label="Select card name"
@@ -86,7 +86,7 @@ const AddCard = () => {
             isSearchable={true}
             itemSize={30}
             filterOption={labelFilter}
-            placeholder="Type three letters to show cards!"
+            placeholder="Type three letters to show cards!"            
           ></WindowedSelect>
         </Form.Group>
 
@@ -122,10 +122,11 @@ const AddCard = () => {
             onChange={handlePriceChange}
             placeholder="Enter card price in euros"
             style={{ width: 462 }}
+            data-cy="cardPriceInput"
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" disabled={!selectedCardOption}>
+        <Button variant="primary" type="submit" disabled={!selectedCardOption} data-cy="cardSubmit">
           Submit
         </Button>
       </Form>

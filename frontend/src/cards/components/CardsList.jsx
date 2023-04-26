@@ -84,6 +84,7 @@ const CardsList = (props) => {
               value={searchString}
               onChange={handleSearchChange}
               placeholder="Filter listings by name"
+              data-cy="cardNameSearch"
             />
           </Form.Group>
         </Col>

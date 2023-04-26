@@ -90,9 +90,9 @@ const CardItem = (props) => {
     <Card style={cardStyle}>
       <Card.Img variant="top" src={props.image} alt={props.name} />
       <Card.Body>
-        <Card.Title>{props.name}</Card.Title>
+        <Card.Title data-cy="cardTitle">{props.name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">{props.set}</Card.Subtitle>
-        <Card.Text>
+        <Card.Text data-cy="cardText">
           {cardCondition} - {cardPrice} €
         </Card.Text>
         <Card.Footer>

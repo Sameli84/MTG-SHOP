@@ -38,7 +38,7 @@ const Authenticate = (props) => {
       }
       console.log(data);
       auth.login(data.id, data.token);
-      history.push("/")
+      history.push("/");
     },
     onError: (error) => {
       console.log(error);
@@ -52,7 +52,7 @@ const Authenticate = (props) => {
       // regardless which mutation resolves first
       console.log(data);
       auth.login(data.id, data.token);
-      history.push("/")
+      history.push("/");
     },
     onError: (error) => {
       // An error happened!
@@ -75,7 +75,7 @@ const Authenticate = (props) => {
 
   function navigateToOtp() {
     if (emailRef.current.value.includes("@")) {
-      setEmail(emailRef.current.value)
+      setEmail(emailRef.current.value);
       otpMutation.mutate({
         email: emailRef.current.value,
       });
@@ -127,11 +127,12 @@ const Authenticate = (props) => {
           )}
           <Form.Group className="mb-2">
             <Form.Label className="m-1">Email address</Form.Label>
-            <Form.Control
+            <Form.Control              
               required
               type="email"
               placeholder="Enter email"
               ref={emailRef}
+              data-cy="email"
             />
             <Form.Control.Feedback className="m-1" type="invalid">
               Please provide a valid email.
@@ -139,12 +140,13 @@ const Authenticate = (props) => {
           </Form.Group>
           <Form.Group className="mb-2">
             <Form.Label className="m-1">Password</Form.Label>
-            <Form.Control
+            <Form.Control              
               required
               minLength="8"
               type="password"
               placeholder="Password"
               ref={passwordRef}
+              data-cy="password"
             />
             <Form.Control.Feedback className="m-1" type="invalid">
               Please provide a password of at least 8 characters.
@@ -155,6 +157,7 @@ const Authenticate = (props) => {
             variant="primary"
             type="submit"
             disable={signUpUserMutation.isLoading.toString()}
+            data-cy="submitLogin"
           >
             {isLoginMode ? "LOGIN" : "SIGNUP"}
           </Button>
